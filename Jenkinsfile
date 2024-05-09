@@ -1,102 +1,63 @@
-
 pipeline {
     agent any
-
+    
     stages {
         stage('Build') {
             steps {
-                echo "Use Maven or any build tool to compile and package your code"
+                echo 'Building the code using Maven'
+                // Add Maven build commands here
             }
         }
-
+        
         stage('Unit and Integration Tests') {
             steps {
-                echo "Use test automation tools for unit and integration tests (e.g., JUnit)"
+                echo 'Running unit tests using JUnit'
+                // Add commands to run unit tests
+                
+                echo 'Running integration tests using Selenium'
+                // Add commands to run integration tests
             }
-            post {
-                success {
-                    emailext(
-                        to: "likithgowda1802@gmail.com",
-                        subject: "Unit and Integration Test Stage: Success",
-                        body: "Unit and Integration Test Stage was successful.",
-                        attachLog: true
-                    )
-                }
-                failure {
-                    emailext(
-                        to: "likithgowda1802@gmail.com",
-                        subject: "Unit and Integration Test Stage: Failure",
-                        body: "Unit and Integration Test Stage failed.",
-                        attachLog: true
-                    )
-                }
         }
-        }
-
+        
         stage('Code Analysis') {
             steps {
-                echo "Integrate a code analysis tool (e.g., SonarQube) to analyze the code"
+                echo 'Running code analysis using SonarQube'
+                // Add commands to run code analysis with SonarQube
             }
         }
-
+        
         stage('Security Scan') {
             steps {
-                echo "Integrate a security scanning tool (e.g., OWASP ZAP) to scan the code"
+                echo 'Performing security scan using OWASP ZAP'
+                // Add commands to perform security scan with OWASP ZAP
             }
-            post {
-                success {
-                    emailext(
-                        to: "likithgowda1802@gmail.com",
-                        subject: "Security Scan Stage: Success",
-                        body: "The security scan stage was successful.",
-                        attachLog: true
-                    )
-                }
-                failure {
-                    emailext(
-                        to: "likithgowda1802@gmail.com",
-                        subject: "Security Scan Stage: Failure",
-                        body: "The security scan stage failed.",
-                        attachLog: true
-                    )
-                }
         }
-        }
-
+        
         stage('Deploy to Staging') {
             steps {
-                echo "Deploy to a staging server (e.g., AWS EC2)"
+                echo 'Deploying the application to a staging server (e.g., AWS EC2 instance)'
+                // Add commands to deploy to staging
             }
         }
-
+        
         stage('Integration Tests on Staging') {
             steps {
-                echo "Run integration tests on the staging environment (e.g., Selenium WebDriver)"
+                echo 'Running integration tests on staging environment'
+                // Add commands to run integration tests on staging
             }
-            post {
-                success {
-                    emailext(
-                        to: "likithgowda1802@gmail.com",
-                        subject: "Integration Tests on Staging Stage: Success",
-                        body: "Integration Tests on Staging stage was successful.",
-                        attachLog: true
-                    )
-                }
-                failure {
-                    emailext(
-                        to: "likithgowda1802@gmail.com",
-                        subject: "Integration Tests on Staging Stage: Failure",
-                        body: "Integration Tests on Staging Stage failed.",
-                        attachLog: true
-                    )
-                }
         }
-        }
-
+        
         stage('Deploy to Production') {
             steps {
-                echo "Deploy to a production server.. (e.g., AWS EC2)"
+                echo 'Deploying the application to a production server (e.g., AWS EC2 instance)'
+                // Add commands to deploy to production
             }
+        }
+    }
+    
+    post {
+        always {
+            emailext body: 'Pipeline completed: ${currentBuild.result}', subject: 'Pipeline Notification', to: 'likithgowda1802@gmail.com'
         }
     }
 }
