@@ -1,94 +1,63 @@
 pipeline {
     agent any
-
+    
     stages {
-        stage('Stage 1: Build') {
+        stage('Build') {
             steps {
                 echo 'Building the code using Maven'
+                // Add Maven build commands here
             }
         }
-
-        stage('Stage 2: Unit and Integration Tests') {
+        
+        stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit tests using JUnit and integration tests using Selenium'
-            }
-            post {
-                always {
-                    sendEmailWithLog('Stage 2: Unit and Integration Tests')
-                }
+                echo 'Running unit tests using JUnit'
+                // Add commands to run unit tests
+                
+                echo 'Running integration tests using Selenium'
+                // Add commands to run integration tests
             }
         }
-
-        stage('Stage 3: Code Analysis') {
+        
+        stage('Code Analysis') {
             steps {
-                echo 'Performing code analysis using SonarQube'
+                echo 'Running code analysis using SonarQube'
+                // Add commands to run code analysis with SonarQube
             }
         }
-
-        stage('Stage 4: Security Scan') {
+        
+        stage('Security Scan') {
             steps {
                 echo 'Performing security scan using OWASP ZAP'
-            }
-            post {
-                always {
-                    sendEmailWithLog('Stage 4: Security Scan')
-                }
+                // Add commands to perform security scan with OWASP ZAP
             }
         }
-
-        stage('Stage 5: Deploy to Staging') {
+        
+        stage('Deploy to Staging') {
             steps {
-                echo 'Deploying the application to the staging server'
+                echo 'Deploying the application to a staging server (e.g., AWS EC2 instance)'
+                // Add commands to deploy to staging
             }
         }
-
-        stage('Stage 6: Integration Tests on Staging') {
+        
+        stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integration tests on the staging environment using Selenium'
+                echo 'Running integration tests on staging environment'
+                // Add commands to run integration tests on staging
             }
         }
-
-        stage('Stage 7: Deploy to Production') {
+        
+        stage('Deploy to Production') {
             steps {
-                echo 'Deploying the application to the production AWS EC2 instance server '
+                echo 'Deploying the application to a production server (e.g., AWS EC2 instance)'
+                // Add commands to deploy to production
             }
         }
     }
-
+    
     post {
         always {
-            script {
-                def emailSubject = "${currentBuild.currentResult} - ${currentBuild.fullDisplayName}"
-                def emailBody = """
-                    Pipeline Status: ${currentBuild.currentResult}
-                    Build URL: ${env.BUILD_URL}
-                """
-
-                emailext(
-                    subject: emailSubject,
-                    body: emailBody,
-                    to: 'likithgowda1802@gmail.com'
-                )
-            }
+            emailext body: 'Pipeline completed: ${currentBuild.result}', subject: 'Pipeline Notification', to: 'likithgowda1802@gmail.com'
         }
-    }
-}
-
-def sendEmailWithLog(stageName) {
-    script {
-        def emailSubject = "${currentBuild.currentResult} - ${currentBuild.fullDisplayName} - ${stageName}"
-        def emailBody = """
-            Stage: ${stageName}
-            Status: ${currentBuild.currentResult}
-            Build URL: ${env.BUILD_URL}
-            Console Output: ${currentBuild.rawBuild.getLog(200)}
-        """
-
-        emailext(
-            subject: emailSubject,
-            body: emailBody,
-            to: 'likithgowda1802@gmail.com',
-            attachLog: true
-        )
     }
 }
