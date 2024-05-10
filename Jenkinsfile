@@ -88,7 +88,16 @@ pipeline {
             steps {
                     // Deploy the application to a prooduction server like AWS EC2 instance
                     echo 'Deploy the application to production server'
+                
             }
         }
     }
+    post {
+        success {
+                mail to: "likithgowda1802@gmail.com",
+                subject: "Build Success",
+                body: "The build completed successfully."
+        }
+    }
 }
+
