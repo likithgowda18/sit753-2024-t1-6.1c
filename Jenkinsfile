@@ -16,7 +16,7 @@ pipeline {
             post {
         success {
            
-                mail to: "purvasha1013@gmail.com",
+                mail to: "likithgowda1802@gmail.com",
                 subject: "Build Success",
                 body: "The Unit and Integration Test is successfull."     
         }
@@ -36,7 +36,7 @@ pipeline {
             post {
         success {
            
-                mail to: "purvasha1013@gmail.com",
+                mail to: "likithgowda1802@gmail.com",
                 subject: "Build Success",
                 body: "The Security Scan check is completed successfully."     
         }
@@ -64,7 +64,7 @@ pipeline {
     post {
         success {
            
-                mail to: "purvasha1013@gmail.com",
+                mail to: "likithgowda1802@gmail.com",
                 subject: "Build Success",
                 body: "The build completed successfully."
                 
