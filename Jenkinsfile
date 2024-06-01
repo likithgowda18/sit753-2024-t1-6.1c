@@ -18,7 +18,8 @@ pipeline {
            
                 mail to: "likithgowda1802@gmail.com",
                 subject: "Build Success",
-                body: "The Unit and Integration Test is successfull."     
+                body: "The Unit and Integration Test is successfull."
+                attachLog: true
         }
     }
         }
@@ -38,7 +39,8 @@ pipeline {
            
                 mail to: "likithgowda1802@gmail.com",
                 subject: "Build Success",
-                body: "The Security Scan check is completed successfully."     
+                body: "The Security Scan check is completed successfully."  
+                attachLog: true
         }
     }
         }
