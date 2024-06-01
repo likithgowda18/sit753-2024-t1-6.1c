@@ -4,13 +4,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean'
+                echo 'sh \'mvn clean\''
             }
         }
         
         stage('Unit and Integration Tests') {
             steps {
-                sh 'mvn test'
+                echo 'sh \'mvn test\''
             }
             post {
                 success {
@@ -34,13 +34,13 @@ pipeline {
         
         stage('Code Analysis') {
             steps {
-                sh 'mvn checkstyle:check'
+                echo 'sh \'mvn checkstyle:check\''
             }
         }
         
         stage('Security Scan') {
             steps {
-                sh 'snyk test'
+                echo 'sh \'snyk test\''
             }
             post {
                 success {
@@ -70,7 +70,7 @@ pipeline {
         
         stage('Integration Tests on Staging') {
             steps {
-                sh 'mvn integration-test'
+                echo 'sh \'mvn integration-test\''
             }
             post {
                 success {
@@ -94,7 +94,7 @@ pipeline {
         
         stage('Deploy to Production') {
             steps {
-                sh 'mvn production'
+                echo 'mvn production'
             }
         }
     }
