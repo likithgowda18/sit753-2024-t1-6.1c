@@ -1,23 +1,23 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Build') {
             steps {
-                echo "Use Maven or any build tool to compile and package your code"
+                sh 'mvn clean'
             }
         }
-
+        
         stage('Unit and Integration Tests') {
             steps {
-                echo "Use test automation tools for unit and integration tests (e.g., JUnit)"
+                sh 'mvn test'
             }
             post {
                 success {
                     emailext(
                         to: "likithgowda1802@gmail.com",
                         subject: "Unit and Integration Test Stage: Success",
-                        body: "Unit and Integration Test Stage was successful.",
+                        body: "The Unit and Integration Test stage was successful.",
                         attachLog: true
                     )
                 }
@@ -25,29 +25,29 @@ pipeline {
                     emailext(
                         to: "likithgowda1802@gmail.com",
                         subject: "Unit and Integration Test Stage: Failure",
-                        body: "Unit and Integration Test Stage failed.",
+                        body: "The Unit and Integration Test stage failed.",
                         attachLog: true
                     )
                 }
             }
         }
-
+        
         stage('Code Analysis') {
             steps {
-                echo "Integrate a code analysis tool (e.g., SonarQube) to analyze the code"
+                sh 'mvn checkstyle:check'
             }
         }
-
+        
         stage('Security Scan') {
             steps {
-                echo "Integrate a security scanning tool (e.g., OWASP ZAP) to scan the code"
+                sh 'snyk test'
             }
             post {
                 success {
                     emailext(
                         to: "likithgowda1802@gmail.com",
                         subject: "Security Scan Stage: Success",
-                        body: "The security scan stage was successful.",
+                        body: "The Security Scan stage was successful.",
                         attachLog: true
                     )
                 }
@@ -55,29 +55,29 @@ pipeline {
                     emailext(
                         to: "likithgowda1802@gmail.com",
                         subject: "Security Scan Stage: Failure",
-                        body: "The security scan stage failed.",
+                        body: "The Security Scan stage failed.",
                         attachLog: true
                     )
                 }
             }
         }
-
+        
         stage('Deploy to Staging') {
             steps {
-                echo "Deploy to a staging server (e.g., AWS EC2)"
+                echo 'deploying'
             }
         }
-
+        
         stage('Integration Tests on Staging') {
             steps {
-                echo "Run integration tests on the staging environment (e.g., Selenium WebDriver)"
+                sh 'mvn integration-test'
             }
             post {
                 success {
                     emailext(
                         to: "likithgowda1802@gmail.com",
                         subject: "Integration Tests on Staging Stage: Success",
-                        body: "Integration Tests on Staging stage was successful.",
+                        body: "The Integration Tests on Staging stage was successful.",
                         attachLog: true
                     )
                 }
@@ -85,32 +85,32 @@ pipeline {
                     emailext(
                         to: "likithgowda1802@gmail.com",
                         subject: "Integration Tests on Staging Stage: Failure",
-                        body: "Integration Tests on Staging Stage failed.",
+                        body: "The Integration Tests on Staging stage failed.",
                         attachLog: true
                     )
                 }
             }
         }
-
+        
         stage('Deploy to Production') {
             steps {
-                echo "Deploy to a production server (e.g., AWS EC2)"
+                sh 'mvn production'
             }
         }
     }
     
     post {
         success {
-            emailext (
-                to: 'likithgowda1802@gmail.com',
+            emailext(
+                to: "likithgowda1802@gmail.com",
                 subject: "Build Success",
                 body: "The build completed successfully.",
                 attachLog: true
             )
         }
         failure {
-            emailext (
-                to: 'likithgowda1802@gmail.com',
+            emailext(
+                to: "likithgowda1802@gmail.com",
                 subject: "Build Failure",
                 body: "The build failed.",
                 attachLog: true
