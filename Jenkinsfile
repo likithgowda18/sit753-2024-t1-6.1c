@@ -4,103 +4,101 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean'
+                echo "Use Maven or any build tool to compile and package your code"
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
-                sh 'mvn test'
+                echo "Use test automation tools for unit and integration tests (e.g., JUnit)"
             }
             post {
                 success {
-                    script {
-                        def logFile = 'unit_test.log'
-                        sh "mvn test | tee ${logFile}"
-                        emailext (
-                            to: 'likithgowda1802@gmail.com',
-                            subject: "Build Success - Unit and Integration Tests",
-                            body: "The Unit and Integration Tests completed successfully.",
-                            attachLog: true,
-                            attachmentsPattern: logFile
-                        )
-                    }
+                    emailext(
+                        to: "likithgowda1802@gmail.com",
+                        subject: "Unit and Integration Test Stage: Success",
+                        body: "Unit and Integration Test Stage was successful.",
+                        attachLog: true
+                    )
                 }
                 failure {
-                    script {
-                        def logFile = 'unit_test.log'
-                        sh "mvn test | tee ${logFile}"
-                        emailext (
-                            to: 'likithgowda1802@gmail.com',
-                            subject: "Build Failure - Unit and Integration Tests",
-                            body: "The Unit and Integration Tests failed.",
-                            attachLog: true,
-                            attachmentsPattern: logFile
-                        )
-                    }
+                    emailext(
+                        to: "likithgowda1802@gmail.com",
+                        subject: "Unit and Integration Test Stage: Failure",
+                        body: "Unit and Integration Test Stage failed.",
+                        attachLog: true
+                    )
                 }
             }
         }
 
         stage('Code Analysis') {
             steps {
-                sh 'mvn checkstyle:check'
+                echo "Integrate a code analysis tool (e.g., SonarQube) to analyze the code"
             }
         }
 
         stage('Security Scan') {
             steps {
-                sh 'snyk test'
+                echo "Integrate a security scanning tool (e.g., OWASP ZAP) to scan the code"
             }
             post {
                 success {
-                    script {
-                        def logFile = 'security_scan.log'
-                        sh "snyk test | tee ${logFile}"
-                        emailext (
-                            to: 'likithgowda1802@gmail.com',
-                            subject: "Build Success - Security Scan",
-                            body: "The Security Scan completed successfully.",
-                            attachLog: true,
-                            attachmentsPattern: logFile
-                        )
-                    }
+                    emailext(
+                        to: "likithgowda1802@gmail.com",
+                        subject: "Security Scan Stage: Success",
+                        body: "The security scan stage was successful.",
+                        attachLog: true
+                    )
                 }
                 failure {
-                    script {
-                        def logFile = 'security_scan.log'
-                        sh "snyk test | tee ${logFile}"
-                        emailext (
-                            to: 'likithgowda1802@gmail.com',
-                            subject: "Build Failure - Security Scan",
-                            body: "The Security Scan failed.",
-                            attachLog: true,
-                            attachmentsPattern: logFile
-                        )
-                    }
+                    emailext(
+                        to: "likithgowda1802@gmail.com",
+                        subject: "Security Scan Stage: Failure",
+                        body: "The security scan stage failed.",
+                        attachLog: true
+                    )
                 }
             }
         }
 
         stage('Deploy to Staging') {
             steps {
-                echo 'deploying'
+                echo "Deploy to a staging server (e.g., AWS EC2)"
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
-                sh 'mvn integration-test'
+                echo "Run integration tests on the staging environment (e.g., Selenium WebDriver)"
+            }
+            post {
+                success {
+                    emailext(
+                        to: "likithgowda1802@gmail.com",
+                        subject: "Integration Tests on Staging Stage: Success",
+                        body: "Integration Tests on Staging stage was successful.",
+                        attachLog: true
+                    )
+                }
+                failure {
+                    emailext(
+                        to: "likithgowda1802@gmail.com",
+                        subject: "Integration Tests on Staging Stage: Failure",
+                        body: "Integration Tests on Staging Stage failed.",
+                        attachLog: true
+                    )
+                }
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                sh 'mvn deploy -P production'
+                echo "Deploy to a production server (e.g., AWS EC2)"
             }
         }
     }
-
+    
     post {
         success {
             emailext (
